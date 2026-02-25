@@ -1,0 +1,19 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Member {
+  id              String   @id @default(cuid())
+  name            String
+  phone           String
+  paymentDate     DateTime
+  durationMonths  Int
+  imageUrl        String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
