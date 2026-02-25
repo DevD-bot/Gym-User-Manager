@@ -7,8 +7,8 @@ export default function Home() {
         <div className="logo-container">
           <div className="logo-text">D<span>FITNESS</span> PLANET</div>
         </div>
-        <div>
-          <Link href="/admin" className="btn-secondary" style={{ marginRight: '1rem' }}>Admin</Link>
+        <div className="action-buttons" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <Link href="/admin" className="btn-secondary">Admin</Link>
           <Link href="/subscribe" className="btn-primary">Join Now</Link>
         </div>
       </nav>
