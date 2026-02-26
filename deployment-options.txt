@@ -1,0 +1,57 @@
+# DFitness Planet - Deployment Guide
+This document outlines the two methods for deploying the DFitness application while retaining the local SQLite database.
+
+---
+
+## Option 1: Local Gym Network Deployment (Free & Easy)
+
+**Best for:** Using the app on a tablet/PC only while physically inside the gym, connected to the gym's Wi-Fi.
+
+**Prerequisites:**
+1. A PC or Laptop at the gym reception that stays turned on during business hours.
+2. The PC must be connected to the gym's Wi-Fi network.
+
+**Steps:**
+1. Open the command terminal on the gym PC.
+2. Navigate to the project folder (`d:\Dfitness`).
+3. Run the command: `npm run build` (You only need to do this once whenever code changes).
+4. Run the command: `npm run start` (This starts the production server).
+5. Find the gym PC's local IP address (e.g., `192.168.1.15`). You can find this by typing `ipconfig` in the Windows command prompt and looking for the IPv4 Address.
+
+**How to Use:**
+- On the gym PC: Open a browser and go to `http://localhost:3000`.
+- On the gym tablet/phone (connected to the same Wi-Fi): Open a browser and go to `http://192.168.1.15:3000` (Replace with the actual IP address found in Step 5).
+
+---
+
+## Option 2: VPS Cloud Deployment (Accessible Anywhere)
+
+**Best for:** Accessing the admin dashboard from home, on mobile data, or anywhere in the world. Requires setting up a Virtual Private Server (Linux).
+
+**Prerequisites:**
+1. Rent a cheap/free Linux server (VPS).
+   - Free options: Oracle Cloud "Always Free" ARM instance.
+   - Cheap options ($4-$6/mo): DigitalOcean, Linode, AWS Lightsail, Hetzner.
+
+**Steps (on the Linux Server):**
+1. Connect to your VPS via SSH.
+2. Install Node.js (v18+) and Git.
+3. Clone your GitHub repository containing the DFitness code.
+4. Navigate into the cloned folder.
+5. Install dependencies: `npm install`
+6. Generate the Prisma database client: `npx prisma generate`
+7. Run the database migrations (if necessary): `npx prisma db push`
+8. Build the application: `npm run build`
+9. Install PM2 globally to keep the app running in the background: `npm install -g pm2`
+10. Start the app with PM2: `pm2 start npm --name "dfitness" -- run start`
+11. Set PM2 to restart on server reboot: `pm2 startup` and `pm2 save`
+
+**Optional but Recommended (Secure Custom Domain):**
+1. Buy a domain name (e.g., `admin.dfitness.com`).
+2. Point the domain's A-record to the VPS's public IP address.
+3. Install Nginx.
+4. Configure Nginx as a reverse proxy to route traffic from port 80 to port 3000.
+5. Install Certbot to get a free SSL certificate automatically so your app runs on `https://`.
+
+**How to Use:**
+- Go to `http://[Your-VPS-Public-IP]:3000` or your custom domain name (e.g., `https://admin.dfitness.com`) from any device, anywhere.
